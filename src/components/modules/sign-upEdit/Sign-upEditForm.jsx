@@ -63,12 +63,18 @@ function SignupEditForm(props) {
       name: formValues?.name || "",
       email: formValues?.email || "",
       mobile: formValues?.mobile || "",
-      about: formValues?.about || "",
+      about_me: formValues?.about_me || "",
       profile_pic: formValues?.profile_pic || "",
       company_name: formValues?.company_name || "",
       designation: formValues?.designation || "",
       company_logo: formValues?.company_logo || "",
       address: formValues?.address || "",
+      facebook: formValues?.facebook || null,
+      xtwitter: formValues?.xtwitter || null,
+      instagram: formValues?.instagram || null,
+      linkedin: formValues?.linkedin || null,
+      website: formValues?.website || null,
+      company_email: formValues?.website || null,
     },
     validate: {
       name: isNotEmpty(),
@@ -79,7 +85,7 @@ function SignupEditForm(props) {
         return null;
       },
       mobile: isNotEmpty(),
-      about: isNotEmpty(),
+      about_me: isNotEmpty(),
       company_name: isNotEmpty(),
       designation: isNotEmpty(),
       address: isNotEmpty(),
@@ -87,6 +93,36 @@ function SignupEditForm(props) {
       company_logo: isNotEmpty(),
       company_email: (value) => {
         if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      xtwitter: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      facebook: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      linkedin: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      instagram: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      website: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
           return true;
         }
         return null;
@@ -108,7 +144,9 @@ function SignupEditForm(props) {
   const [confirmModal, setConfirmModal] = useState(false);
   return (
     <Box>
-      <Modal opened={confirmModal} centered>
+      <Modal opened={confirmModal} centered onClose={() => {
+          setConfirmModal(false);
+        }}>
         <Flex
           className="borderRadiusAll"
           h={height / 5}
@@ -169,17 +207,17 @@ function SignupEditForm(props) {
           formValue["name"] = values.name;
           formValue["email"] = values.email;
           formValue["mobile"] = values.mobile;
-          formValue["about"] = values.about;
+          formValue["about"] = values.about_me;
           formValue["profile_pic"] = values.profile_pic;
           formValue["company_name"] = values.company_name;
           formValue["designation"] = values.designation;
           formValue["company_logo"] = values.company_logo;
           formValue["address"] = values.address;
-          if (uploadedImage) {
-            formValue["profile_pic"] = uploadedImage;
+          if (!uploadedImage) {
+            form.values["profile_pic"] = null;
           }
-          if (companyLogoImage) {
-            formValue["company_logo"] = companyLogoImage;
+          if (!companyLogoImage) {
+            form.values["company_logo"] = null;
           }
           modals.openConfirmModal({
             title: <Text size="md"> {t("FormConfirmationTitle")}</Text>,
@@ -188,14 +226,14 @@ function SignupEditForm(props) {
             confirmProps: { color: "red" },
             onCancel: () => console.log("Cancel"),
             onConfirm: () => {
-              // console.log(values);
+              console.log(values);
               setSpinner(true);
               axios
                 .post(
                   `${
                     import.meta.env.VITE_API_GATEWAY_URL
                   }/nfc-user-update/${id}`,
-                  formValue,
+                  values,
                   {
                     headers: {
                       Accept: `application/json`,
@@ -712,7 +750,7 @@ function SignupEditForm(props) {
                                             // label={t('LinkedinAccount')}
                                             placeholder={t("InstaAccount")}
                                             required={false}
-                                            nextField={"about"}
+                                            nextField={"about_me"}
                                             name={"instagram"}
                                             onChange={(event) => {
                                               setInstagram(
@@ -781,7 +819,7 @@ function SignupEditForm(props) {
                                               placeholder={t("About Self")}
                                               required={true}
                                               nextField={"company_name"}
-                                              name={"about"}
+                                              name={"about_me"}
                                               form={form}
                                               mt={{
                                                 base: 1,
@@ -789,7 +827,7 @@ function SignupEditForm(props) {
                                                 md: "0",
                                                 lg: "0",
                                               }}
-                                              id={"about"}
+                                              id={"about_me"}
                                             />
                                           </Box>
                                         </Box>

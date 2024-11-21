@@ -491,7 +491,7 @@ function ViewCard(props) {
             {(formValues?.facebook ||
               formValues?.linkedin ||
               formValues?.instagram ||
-              formValues?.twitter) && (
+              formValues?.xtwitter) && (
               <>
                 <Box
                   className="boxBackground borderRadiusAllF"
@@ -556,10 +556,10 @@ function ViewCard(props) {
                   </Anchor>
                 </>
               )}
-              {formValues?.twitter && (
+              {formValues?.xtwitter && (
                 <>
                   <Anchor
-                    href={formValues?.twitter}
+                    href={formValues?.xtwitter}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

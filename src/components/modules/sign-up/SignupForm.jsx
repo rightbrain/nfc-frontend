@@ -60,12 +60,18 @@ function SignupForm() {
       name: "",
       email: "",
       mobile: "",
-      about: "",
+      about_me: "",
       profile_pic: "",
       company_name: "",
       designation: "",
       company_logo: "",
       address: "",
+      facebook: null,
+      xtwitter: null,
+      instagram: null,
+      linkedin: null,
+      website: null,
+      company_email: null,
     },
     validate: {
       name: isNotEmpty(),
@@ -76,7 +82,7 @@ function SignupForm() {
         return null;
       },
       mobile: isNotEmpty(),
-      about: isNotEmpty(),
+      about_me: isNotEmpty(),
       company_name: isNotEmpty(),
       designation: isNotEmpty(),
       address: isNotEmpty(),
@@ -88,12 +94,48 @@ function SignupForm() {
         }
         return null;
       },
+      xtwitter: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      facebook: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      linkedin: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      instagram: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
+      website: (value) => {
+        if (value && !/^https:\/\/.+$/.test(value)) {
+          return true;
+        }
+        return null;
+      },
     },
   });
   const [confirmModal, setConfirmModal] = useState(false);
   return (
     <Box>
-      <Modal opened={confirmModal} centered>
+      <Modal
+        opened={confirmModal}
+        centered
+        onClose={() => {
+          setConfirmModal(false);
+        }}
+      >
         <Flex
           className="borderRadiusAll"
           h={height / 5}
@@ -108,8 +150,14 @@ function SignupForm() {
             Kindly check your mail for further instruction.
           </Text>
         </Flex>
-        <Flex className="borderRadiusAll" justify={'center'} align={'center'} pb={'xs'} mt={'4'}>
-        <Button
+        <Flex
+          className="borderRadiusAll"
+          justify={"center"}
+          align={"center"}
+          pb={"xs"}
+          mt={"4"}
+        >
+          <Button
             color="orange.5"
             size="xs"
             mt={"xs"}
@@ -128,7 +176,7 @@ function SignupForm() {
           const formValue = {};
 
           if (twitter) {
-            formValue["twitter"] = twitter;
+            formValue["xtwitter"] = twitter;
           }
           if (linkedin) {
             formValue["linkedin"] = linkedin;
@@ -148,7 +196,7 @@ function SignupForm() {
           formValue["name"] = values.name;
           formValue["email"] = values.email;
           formValue["mobile"] = values.mobile;
-          formValue["about"] = values.about;
+          formValue["about"] = values.about_me;
           formValue["profile_pic"] = values.profile_pic;
           formValue["company_name"] = values.company_name;
           formValue["designation"] = values.designation;
@@ -165,7 +213,7 @@ function SignupForm() {
               axios
                 .post(
                   `${import.meta.env.VITE_API_GATEWAY_URL}/nfc-user/store`,
-                  formValue,
+                  values,
                   {
                     headers: {
                       Accept: `application/json`,
@@ -482,7 +530,9 @@ function SignupForm() {
                                       >
                                         <Box>
                                           <InputForm
-                                            tooltip={t("TwitterAccount")}
+                                            tooltip={t(
+                                              "Proper twitter link required"
+                                            )}
                                             placeholder={t("TwitterAccount")}
                                             form={form}
                                             required={false}
@@ -544,7 +594,9 @@ function SignupForm() {
                                       >
                                         <Box>
                                           <InputForm
-                                            tooltip={t("LinkedinAccount")}
+                                            tooltip={t(
+                                              "Proper linkedin link required"
+                                            )}
                                             placeholder={t("LinkedinAccount")}
                                             required={false}
                                             nextField={"facebook"}
@@ -673,7 +725,7 @@ function SignupForm() {
                                             // label={t('LinkedinAccount')}
                                             placeholder={t("InstaAccount")}
                                             required={false}
-                                            nextField={"about"}
+                                            nextField={"about_me"}
                                             name={"instagram"}
                                             onChange={(event) => {
                                               setInstagram(
@@ -742,7 +794,7 @@ function SignupForm() {
                                               placeholder={t("About Self")}
                                               required={true}
                                               nextField={"company_name"}
-                                              name={"about"}
+                                              name={"about_me"}
                                               form={form}
                                               mt={{
                                                 base: 1,
@@ -750,7 +802,7 @@ function SignupForm() {
                                                 md: "0",
                                                 lg: "0",
                                               }}
-                                              id={"about"}
+                                              id={"about_me"}
                                             />
                                           </Box>
                                         </Box>
