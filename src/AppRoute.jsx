@@ -14,7 +14,7 @@ function AppRoute() {
       <Route path="/" element={<Layout />}>
         <Route path="login" element={<Login />} />
         <Route path="sign-up" element={<SignupIndex />} />
-        <Route path="view/:id" element={<SignupViewIndex />} />
+        <Route path="vcard/:id" element={<SignupViewIndex />} />
         <Route path="edit/:id" element={<SignupEditIndex />} />
         <Route path="users" element={<SignupTableIndex />} />
         <Route path="card-select/:id" element={<SelectDesignIndex />} />

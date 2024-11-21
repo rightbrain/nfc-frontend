@@ -114,7 +114,7 @@ function SelectDesignIndex() {
                   onClick={() => {
                     setConfirmModal(false);
                     // form.reset();
-                    navigate(`/view/${id}`);
+                    navigate(`/vcard/${id}`);
                   }}
                 >
                   Understand

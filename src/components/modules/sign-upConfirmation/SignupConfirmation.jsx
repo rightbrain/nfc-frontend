@@ -86,7 +86,7 @@ function SignupConfirmation() {
         e.preventDefault();
         setFormData(form.getValues()); // Store form data in local storage
         console.log(form.getValues());
-        navigate('/view');
+        navigate('/vcard');
 
     };
 
