@@ -643,9 +643,11 @@ function ViewCard(props) {
           <Grid.Col>
             <Group justify="flex-end" h={{ base: 30, md: 25 }}>
               <>
+              {/* buttons disabled */}
                 {
                   <>
-                    <Button
+                  
+                    {/* <Button
                       size="xs"
                       color={`orange.6`}
                       // type="submit"
@@ -691,7 +693,7 @@ function ViewCard(props) {
                           {t("ViewCard")}
                         </Text>
                       </Flex>
-                    </Button>
+                    </Button> */}
                   </>
                 }
               </>
