@@ -408,7 +408,7 @@ function SignupForm() {
                                       >
                                         <Box>
                                           <InputForm
-                                            tooltip={t("Email")}
+                                            tooltip={t("EmailValidate")}
                                             // label={t('Email')}
                                             placeholder={t("Email")}
                                             required={true}
@@ -479,7 +479,7 @@ function SignupForm() {
                                             onChange={(phone) =>
                                               form.setFieldValue("phone", phone)
                                             }
-                                            tooltip={t("Phone")}
+                                            tooltip={t("PhoneValidate")}
                                             placeholder={t("Phone")}
                                             // required={true}
                                             nextField={"xtwitter"}
@@ -531,7 +531,7 @@ function SignupForm() {
                                         <Box>
                                           <InputForm
                                             tooltip={t(
-                                              "Proper twitter link required"
+                                              "TwitterAccountValidate"
                                             )}
                                             placeholder={t("TwitterAccount")}
                                             form={form}
@@ -595,7 +595,7 @@ function SignupForm() {
                                         <Box>
                                           <InputForm
                                             tooltip={t(
-                                              "Proper linkedin link required"
+                                              "LinkedinAccountValidate"
                                             )}
                                             placeholder={t("LinkedinAccount")}
                                             required={false}
@@ -658,7 +658,7 @@ function SignupForm() {
                                       >
                                         <Box>
                                           <InputForm
-                                            tooltip={t("FacebookAccount")}
+                                            tooltip={t("FacebookAccountValidate")}
                                             placeholder={t("FacebookAccount")}
                                             required={false}
                                             nextField={"instagram"}
@@ -721,7 +721,7 @@ function SignupForm() {
                                       >
                                         <Box>
                                           <InputForm
-                                            tooltip={t("InstaAccount")}
+                                            tooltip={t("InstaAccountValidate")}
                                             // label={t('LinkedinAccount')}
                                             placeholder={t("InstaAccount")}
                                             required={false}
@@ -1001,7 +1001,7 @@ function SignupForm() {
                                     >
                                       <Box>
                                         <InputForm
-                                          tooltip={t("Designation")}
+                                          tooltip={t("DesignationValidate")}
                                           // label={t('CompanyName')}
                                           placeholder={t("Designation")}
                                           required={true}
@@ -1047,7 +1047,7 @@ function SignupForm() {
                                     >
                                       <Box>
                                         <InputForm
-                                          tooltip={t("CompanyWebsite")}
+                                          tooltip={t("CompanyWebsiteValidate")}
                                           // label={t('CompanyWebsite')}
                                           placeholder={t("CompanyWebsite")}
                                           required={false}
@@ -1100,7 +1100,7 @@ function SignupForm() {
                                     >
                                       <Box>
                                         <InputForm
-                                          tooltip={t("CompanyEmail")}
+                                          tooltip={t("CompanyEmailValidate")}
                                           // label={t('CompanyEmail')}
                                           placeholder={t("CompanyEmail")}
                                           required={false}
