@@ -1,28 +1,27 @@
 import VCard from "vcard-creator";
 import download from "downloadjs";
-import { contactData } from "./ContactData";
-import { readLocalStorageValue } from "@mantine/hooks";
 
 
-export default function generateAndDownloadVCard() {
+export default function generateAndDownloadVCard(props) {
 
-    const values = readLocalStorageValue({ key: 'signup-form-data' });
-    console.log(values.name);
-    console.log(values.email);
-    console.log(values.phone);
-    console.log(values.company_name);
-    console.log(values.designation);
-    console.log(values.address);
+    const {formValues} = props
+
+    console.log(formValues?.name);
+    console.log(formValues?.email);
+    console.log(formValues?.mobile);
+    console.log(formValues?.company_name);
+    console.log(formValues?.designation);
+    console.log(formValues?.address);
     const downloadFile = () => {
         const myVCard = new VCard();
         myVCard
-            .addName(values.name)
-            .addEmail(values.email)
-            .addPhoneNumber(values.phone)
-            .addCompany(values.company_name)
-            .addJobtitle(values.designation)
-            .addAddress(values.address)
-        download(myVCard.toString(), "dlText.vcf");
+            .addName(formValues?.name)
+            .addEmail(formValues?.email)
+            .addPhoneNumber(formValues?.mobile)
+            .addCompany(formValues?.company_name)
+            .addJobtitle(formValues?.designation)
+            .addAddress(formValues?.address)
+        download(myVCard.toString(), "vCard.vcf");
     };
     downloadFile();
 }

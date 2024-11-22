@@ -68,7 +68,7 @@ function SelectDesignIndex() {
         setSelectedDesign(design);
         // navigate("/sign-upConfirmation");
 
-        console.log(`Selected Design: ${design}`);
+        // console.log(`Selected Design: ${design}`);
       },
     });
 

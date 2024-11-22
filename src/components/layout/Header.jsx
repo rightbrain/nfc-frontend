@@ -61,8 +61,8 @@ export default function Header() {
     const path = '/sign-up'
     const pa = location.pathname;
     const handleClick = () => {
-        console.log(path)
-        console.log(pa);
+        // console.log(path)
+        // console.log(pa);
         navigate(path);
     };
 

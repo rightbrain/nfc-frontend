@@ -44,7 +44,6 @@ import CardGeneratorIndex from "../v-card/generateAndDownloadVCard";
 
 function ViewCard(props) {
   const { formValues, spinner, id } = props;
-  console.log(formValues);
   const { t } = useTranslation();
   const values = readLocalStorageValue({ key: "signup-form-data" });
   const { mainAreaHeight } = useOutletContext();
@@ -56,7 +55,22 @@ function ViewCard(props) {
   const handleCardClick = () => {
     console.log("Download button clicked");
     // Call the CardGeneratorIndex component to initiate download
-    CardGeneratorIndex({ values });
+    CardGeneratorIndex({ formValues });
+  };
+
+  const handleShareClick = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "V card",
+          text: "Checkout my vcard",
+          url: window.location.href,
+        })
+        .then(() => console.log("Successfully Shared"))
+        .catch((error) => console.log("Error sharing Page", error));
+    } else {
+      console.log("Web share api is not working on this browser");
+    }
   };
 
   return (
@@ -604,6 +618,7 @@ function ViewCard(props) {
                   type="submit"
                   mt={4}
                   leftSection={<IconShare size={25} />}
+                  onClick={handleShareClick}
                 >
                   <Flex direction="column" gap={0}>
                     <Text size={14} fw={700}>
