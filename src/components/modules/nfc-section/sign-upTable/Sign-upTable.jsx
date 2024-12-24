@@ -20,7 +20,7 @@ import { readLocalStorageValue, useLocalStorage } from "@mantine/hooks";
 import { Navigate, useOutletContext } from "react-router-dom";
 import { Table } from "@mantine/core";
 
-import tableCss from "../../../assets/css/Table.module.css";
+import tableCss from "../../../../assets/css/Table.module.css";
 
 function SignupTable() {
   const { t } = useTranslation();

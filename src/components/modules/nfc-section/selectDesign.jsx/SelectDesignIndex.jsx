@@ -14,17 +14,17 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { modals } from "@mantine/modals";
-import { getLoadingProgress } from "../../global-hook/loading-progress/getLoadingProgress.js";
-import BoldCard from "../CardDesigns/BoldCard.jsx";
-import ElegantCard from "../CardDesigns/ElegantCard.jsx";
-import SimpleCard from "../CardDesigns/SimpleCard.jsx";
-import DesignFour from "../CardDesigns/DesignFour.jsx";
-import DesignFive from "../CardDesigns/DesignFive.jsx";
+import { getLoadingProgress } from "../../../global-hook/loading-progress/getLoadingProgress.js";
+import BoldCard from "../../CardDesigns/BoldCard.jsx";
+import ElegantCard from "../../CardDesigns/ElegantCard.jsx";
+import SimpleCard from "../../CardDesigns/SimpleCard.jsx";
+import DesignFour from "../../CardDesigns/DesignFour.jsx";
+import DesignFive from "../../CardDesigns/DesignFive.jsx";
 import { useViewportSize } from "@mantine/hooks";
-import DesignSix from "../CardDesigns/DesignSix.jsx";
+import DesignSix from "../../CardDesigns/DesignSix.jsx";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
-import MainDesign from "../CardDesigns/MainDesign.jsx";
+import MainDesign from "../../CardDesigns/MainDesign.jsx";
 
 function SelectDesignIndex() {
   const { t, i18n } = useTranslation();

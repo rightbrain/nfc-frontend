@@ -16,12 +16,12 @@ import { useDisclosure, useHotkeys } from "@mantine/hooks";
 import { hasLength, useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
-import InputForm from "../../form-builders/InputForm.jsx";
-import ImageUploadDropzone from "../../form-builders/ImageUploadDropzone.jsx";
-import TextAreaForm from "../../form-builders/TextAreaForm.jsx";
+import InputForm from "../../../form-builders/InputForm.jsx";
+import ImageUploadDropzone from "../../../form-builders/ImageUploadDropzone.jsx";
+import TextAreaForm from "../../../form-builders/TextAreaForm.jsx";
 import { useLocalStorage } from '@mantine/hooks';
 import { useNavigate } from "react-router-dom";
-import PhoneNumberInput from "../../form-builders/PhoneNumInput.jsx";
+import PhoneNumberInput from "../../../form-builders/PhoneNumInput.jsx";
 
 function SignupConfirmation() {
     const { t, i18n } = useTranslation();

@@ -5,7 +5,7 @@ import {
 } from "@mantine/core";
 import { useTranslation } from 'react-i18next';
 
-import { getLoadingProgress } from "../../global-hook/loading-progress/getLoadingProgress.js";
+import { getLoadingProgress } from "../../../global-hook/loading-progress/getLoadingProgress.js";
 
 import SignupTable from "./Sign-upTable.jsx";
 

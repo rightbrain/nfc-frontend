@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Progress, Title, Container } from "@mantine/core";
+import { Box, Progress } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 
-import { getLoadingProgress } from "../../global-hook/loading-progress/getLoadingProgress.js";
+import { getLoadingProgress } from "../../../global-hook/loading-progress/getLoadingProgress.js";
 
-import SignupEditForm from "./Sign-upEditForm.jsx";
+import ViewCard from "./ViewCard.jsx";
+import { useOutletContext, useParams } from "react-router-dom";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 
-function SignupEditIndex() {
+function SignupViewIndex({ setFormData }) {
   const { t, i18n } = useTranslation();
-  const [formValues, setFormValues] = useState(null);
-
   const { id } = useParams();
   const [spinner, setSpinner] = useState(false);
-
+  const [formValues, setFormValues] = useState(null);
   useEffect(() => {
     setSpinner(true);
     axios({
@@ -28,7 +26,6 @@ function SignupEditIndex() {
       }
     });
   }, []);
-
   const progress = getLoadingProgress();
 
   return (
@@ -38,13 +35,12 @@ function SignupEditIndex() {
       )}
       {progress === 100 && (
         <>
-          <Box mt={6}>
-            <SignupEditForm
-              setSpinner={setSpinner}
-              spinner={spinner}
-              formValues={formValues}
-              id={id}
-            />
+          {/* {console.log(setFormData)} */}
+          <Box>
+            <ViewCard spinner={spinner} formValues={formValues} id={id} />
+            {/* <ViewCard /> */}
+            {/* <ContactCard /> */}
+            {/* <ContactCardPrev /> */}
           </Box>
         </>
       )}
@@ -52,4 +48,4 @@ function SignupEditIndex() {
   );
 }
 
-export default SignupEditIndex;
+export default SignupViewIndex;

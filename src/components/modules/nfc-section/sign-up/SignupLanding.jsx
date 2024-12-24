@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Carousel } from '@mantine/carousel';
 
-import { getLoadingProgress } from "../../global-hook/loading-progress/getLoadingProgress.js";
+import { getLoadingProgress } from "../../../global-hook/loading-progress/getLoadingProgress.js";
 
 
 function SignupLanding() {

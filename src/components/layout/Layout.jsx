@@ -6,7 +6,7 @@ import Header from "./Header";
 // import Footer from "./Footer";
 
 import Footer from "./Footer";
-import SignupLanding from "../modules/sign-up/SignupLanding";
+import SignupLanding from "../modules/nfc-section/sign-up/SignupLanding";
 
 function Layout() {
     const { height } = useViewportSize();

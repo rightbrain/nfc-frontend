@@ -36,11 +36,11 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { readLocalStorageValue } from "@mantine/hooks";
 import { Navigate } from "react-router-dom";
 
-import facebook from "../../../assets/images/facebook.png";
-import twitter from "../../../assets/images/twitter.png";
-import linkedin from "../../../assets/images/linkedin.png";
-import instagram from "../../../assets/images/instagram.png";
-import CardGeneratorIndex from "../v-card/generateAndDownloadVCard";
+import facebook from "../../../../assets/images/facebook.png";
+import twitter from "../../../../assets/images/twitter.png";
+import linkedin from "../../../../assets/images/linkedin.png";
+import instagram from "../../../../assets/images/instagram.png";
+import CardGeneratorIndex from "../v-card/generateAndDownloadVCard.jsx";
 
 function ViewCard(props) {
   const { formValues, spinner, id } = props;

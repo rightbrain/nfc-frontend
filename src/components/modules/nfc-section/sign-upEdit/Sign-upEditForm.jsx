@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useOutletContext } from "react-router-dom";
+import { Navigate, useOutletContext, useParams } from "react-router-dom";
 import {
   Button,
   rem,
@@ -13,9 +13,11 @@ import {
   List,
   Stack,
   Tooltip,
-  ActionIcon,
+  Center,
+  Image,
   Loader,
   LoadingOverlay,
+  useMantineTheme,
   Modal,
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
@@ -23,22 +25,25 @@ import {
   IconCheck,
   IconDeviceFloppy,
   IconUsersGroup,
-  IconX,
 } from "@tabler/icons-react";
 import { useDisclosure, useHotkeys } from "@mantine/hooks";
 
-import { hasLength, isNotEmpty, useForm } from "@mantine/form";
+import { hasLength, useForm, isNotEmpty } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
-import InputForm from "../../form-builders/InputForm.jsx";
-import ImageUploadDropzone from "../../form-builders/ImageUploadDropzone.jsx";
-import TextAreaForm from "../../form-builders/TextAreaForm";
+import InputForm from "../../../form-builders/InputForm.jsx";
+import ImageUploadDropzone from "../../../form-builders/ImageUploadDropzone.jsx";
+import TextAreaForm from "../../../form-builders/TextAreaForm.jsx";
 import { useLocalStorage } from "@mantine/hooks";
 import { useNavigate } from "react-router-dom";
-import PhoneNumberInput from "../../form-builders/PhoneNumInput.jsx";
+import PhoneNumberInput from "../../../form-builders/PhoneNumInput.jsx";
+import { readLocalStorageValue } from "@mantine/hooks";
+import fallbackSrc from "../../../../assets/images/fallbackSrc.jpg";
 import axios from "axios";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 
-function SignupForm() {
+function SignupEditForm(props) {
+  const { formValues, spinner, id, setSpinner } = props;
   const { t, i18n } = useTranslation();
 
   const { mainAreaHeight } = useOutletContext();
@@ -46,7 +51,6 @@ function SignupForm() {
   const [opened, { open, close }] = useDisclosure(false);
 
   const [saveCreateLoading, setSaveCreateLoading] = useState(false);
-  const [spinner, setSpinner] = useState(false);
   const navigate = useNavigate();
   const [twitter, setTwitter] = useState("");
   const [linkedin, setLinkedin] = useState("");
@@ -54,24 +58,23 @@ function SignupForm() {
   const [instagram, setInstagram] = useState("");
   const [website, setWebsite] = useState("");
   const [company_email, setCompany_email] = useState("");
-
   const form = useForm({
     initialValues: {
-      name: "",
-      email: "",
-      mobile: "",
-      about_me: "",
-      profile_pic: "",
-      company_name: "",
-      designation: "",
-      company_logo: "",
-      address: "",
-      facebook: null,
-      xtwitter: null,
-      instagram: null,
-      linkedin: null,
-      website: null,
-      company_email: null,
+      name: formValues?.name || "",
+      email: formValues?.email || "",
+      mobile: formValues?.mobile || "",
+      about_me: formValues?.about_me || "",
+      profile_pic: formValues?.profile_pic || "",
+      company_name: formValues?.company_name || "",
+      designation: formValues?.designation || "",
+      company_logo: formValues?.company_logo || "",
+      address: formValues?.address || "",
+      facebook: formValues?.facebook || null,
+      xtwitter: formValues?.xtwitter || null,
+      instagram: formValues?.instagram || null,
+      linkedin: formValues?.linkedin || null,
+      website: formValues?.website || null,
+      company_email: formValues?.website || null,
     },
     validate: {
       name: isNotEmpty(),
@@ -126,16 +129,24 @@ function SignupForm() {
       },
     },
   });
+  const theme = useMantineTheme();
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [companyLogoImage, setCompanyLogoImage] = useState(null);
+  const [profilePreviewImage, setProfilePreviewImage] = useState(null);
+  const [companyLogoPreviewImage, setCompanyLogoPreviewImage] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      if (profilePreviewImage) URL.revokeObjectURL(profilePreviewImage);
+      if (companyLogoPreviewImage) URL.revokeObjectURL(companyLogoPreviewImage);
+    };
+  }, [profilePreviewImage, companyLogoPreviewImage]);
   const [confirmModal, setConfirmModal] = useState(false);
   return (
     <Box>
-      <Modal
-        opened={confirmModal}
-        centered
-        onClose={() => {
+      <Modal opened={confirmModal} centered onClose={() => {
           setConfirmModal(false);
-        }}
-      >
+        }}>
         <Flex
           className="borderRadiusAll"
           h={height / 5}
@@ -144,10 +155,10 @@ function SignupForm() {
           direction={"column"}
         >
           <Text ta={"center"} fz={14} fw={600} p={"xs"}>
-            Successfully Registered.
+            Successfully Edited.
           </Text>
           <Text ta={"center"} fz={12} fw={600} p={"xs"}>
-            Kindly check your mail for further instruction.
+            Go back to to card View
           </Text>
         </Flex>
         <Flex
@@ -164,10 +175,10 @@ function SignupForm() {
             onClick={() => {
               setConfirmModal(false);
               form.reset();
-              navigate(`/`);
+              navigate(`/vcard/${id}`);
             }}
           >
-            Understand
+            Accept
           </Button>
         </Flex>
       </Modal>
@@ -176,7 +187,7 @@ function SignupForm() {
           const formValue = {};
 
           if (twitter) {
-            formValue["xtwitter"] = twitter;
+            formValue["twitter"] = twitter;
           }
           if (linkedin) {
             formValue["linkedin"] = linkedin;
@@ -202,6 +213,12 @@ function SignupForm() {
           formValue["designation"] = values.designation;
           formValue["company_logo"] = values.company_logo;
           formValue["address"] = values.address;
+          if (!uploadedImage) {
+            form.values["profile_pic"] = null;
+          }
+          if (!companyLogoImage) {
+            form.values["company_logo"] = null;
+          }
           modals.openConfirmModal({
             title: <Text size="md"> {t("FormConfirmationTitle")}</Text>,
             children: <Text size="sm"> {t("FormConfirmationMessage")}</Text>,
@@ -209,10 +226,13 @@ function SignupForm() {
             confirmProps: { color: "red" },
             onCancel: () => console.log("Cancel"),
             onConfirm: () => {
+              console.log(values);
               setSpinner(true);
               axios
                 .post(
-                  `${import.meta.env.VITE_API_GATEWAY_URL}/nfc-user/store`,
+                  `${
+                    import.meta.env.VITE_API_GATEWAY_URL
+                  }/nfc-user-update/${id}`,
                   values,
                   {
                     headers: {
@@ -231,8 +251,17 @@ function SignupForm() {
                       icon: <IconCheck size="1rem" />,
                       autoClose: 5000,
                     });
-                    setConfirmModal(true);
                   }
+
+                  notifications.show({
+                    color: "teal",
+                    title: t("Updated Successfully"),
+                    icon: <IconCheck size="1rem" />,
+                    autoClose: 2000,
+                  });
+                  form.reset();
+                  // navigate(`/sign-up/${id}`);
+                  setConfirmModal(true);
                 })
                 .catch((error) => {
                   notifications.show({
@@ -530,9 +559,7 @@ function SignupForm() {
                                       >
                                         <Box>
                                           <InputForm
-                                            tooltip={t(
-                                              "TwitterAccountValidate"
-                                            )}
+                                            tooltip={t("TwitterAccountValidate")}
                                             placeholder={t("TwitterAccount")}
                                             form={form}
                                             required={false}
@@ -594,9 +621,7 @@ function SignupForm() {
                                       >
                                         <Box>
                                           <InputForm
-                                            tooltip={t(
-                                              "LinkedinAccountValidate"
-                                            )}
+                                            tooltip={t("LinkedinAccountValidate")}
                                             placeholder={t("LinkedinAccount")}
                                             required={false}
                                             nextField={"facebook"}
@@ -852,7 +877,7 @@ function SignupForm() {
                                       >
                                         <Tooltip
                                           label={"Profile Picture is required"}
-                                          opened={form.errors.profile_pic}
+                                          opened={!!form.errors.profile_pic}
                                           position="top-end"
                                           bg={`orange.4`}
                                           c={"white"}
@@ -873,19 +898,65 @@ function SignupForm() {
                                             }}
                                             mb={"sm"}
                                           >
-                                            <ImageUploadDropzone
-                                              label={t("ProfilePic")}
-                                              id={"profile_pic"}
-                                              name={"profile_pic"}
-                                              form={form}
-                                              fieldName={"profile_pic"}
-                                              required={true}
-                                              placeholder={t(
-                                                "DropProfilePictureHere"
-                                              )}
-                                              nextField={"company_name"}
-                                              errors={form.errors.profile_pic}
-                                            />
+                                            <Dropzone
+                                              accept={IMAGE_MIME_TYPE}
+                                              onDrop={(e) => {
+                                                setUploadedImage(e[0]);
+                                                const previewUrl =
+                                                  URL.createObjectURL(e[0]);
+                                                setProfilePreviewImage(
+                                                  previewUrl
+                                                );
+                                                form.setFieldValue(
+                                                  "profile_pic",
+                                                  e[0]
+                                                );
+                                              }}
+                                              multiple={false}
+                                              style={{
+                                                border: form.errors.profile_pic
+                                                  ? `2px dashed ${theme.colors.red[3]}`
+                                                  : `2px dashed ${theme.colors.gray[3]}`,
+                                                borderRadius: "4px",
+                                                padding: "20px",
+                                                textAlign: "center",
+                                              }}
+                                            >
+                                              <Center>
+                                                {profilePreviewImage ? (
+                                                  <Image
+                                                    src={profilePreviewImage}
+                                                    height={190}
+                                                    fit="cover"
+                                                    alt="Profile picture"
+                                                  />
+                                                ) : formValues?.profile_pic ? (
+                                                  <Image
+                                                    src={formValues.profile_pic}
+                                                    height={190}
+                                                    fit="cover"
+                                                    alt="Profile picture"
+                                                  />
+                                                ) : (
+                                                  <Center h={190}>
+                                                    <Text
+                                                      c={
+                                                        form.errors
+                                                          .profile_pic && "red"
+                                                      }
+                                                    >
+                                                      {form.errors.profile_pic
+                                                        ? t(
+                                                            "Profile picture is required"
+                                                          )
+                                                        : t(
+                                                            "DropProfilePictureHere"
+                                                          )}
+                                                    </Text>
+                                                  </Center>
+                                                )}
+                                              </Center>
+                                            </Dropzone>
                                           </Box>
                                         </Tooltip>
                                       </Grid.Col>
@@ -1157,7 +1228,7 @@ function SignupForm() {
                                     >
                                       <Tooltip
                                         label={"Company Logo is required"}
-                                        opened={form.errors.company_logo}
+                                        opened={!!form.errors.company_logo}
                                         position="top-end"
                                         bg={`orange.4`}
                                         c={"white"}
@@ -1170,19 +1241,65 @@ function SignupForm() {
                                         }}
                                       >
                                         <Box mt={"2"}>
-                                          <ImageUploadDropzone
-                                            label={t("CompanyLogo")}
-                                            id={"company_logo"}
-                                            name={"company_logo"}
-                                            form={form}
-                                            fieldName={"company_logo"}
-                                            required={true}
-                                            placeholder={t(
-                                              "DropCompanyLogoHere"
-                                            )}
-                                            nextField={"address"}
-                                            errors={form.errors.company_logo}
-                                          />
+                                          <Dropzone
+                                            accept={IMAGE_MIME_TYPE}
+                                            onDrop={(e) => {
+                                              setCompanyLogoImage(e[0]);
+                                              const previewUrl =
+                                                URL.createObjectURL(e[0]);
+                                              setCompanyLogoPreviewImage(
+                                                previewUrl
+                                              );
+                                              form.setFieldValue(
+                                                "company_logo",
+                                                e[0]
+                                              );
+                                            }}
+                                            multiple={false}
+                                            style={{
+                                              border: form.errors.company_logo
+                                                ? `2px dashed ${theme.colors.red[3]}`
+                                                : `2px dashed ${theme.colors.gray[3]}`,
+                                              borderRadius: "4px",
+                                              padding: "20px",
+                                              textAlign: "center",
+                                            }}
+                                          >
+                                            <Center>
+                                              {companyLogoPreviewImage ? (
+                                                <Image
+                                                  src={companyLogoPreviewImage}
+                                                  height={190}
+                                                  fit="cover"
+                                                  alt="Company logo"
+                                                />
+                                              ) : formValues?.company_logo ? (
+                                                <Image
+                                                  src={formValues.company_logo}
+                                                  height={190}
+                                                  fit="cover"
+                                                  alt="Company logo"
+                                                />
+                                              ) : (
+                                                <Center h={190}>
+                                                  <Text
+                                                    c={
+                                                      form.errors
+                                                        .company_logo && "red"
+                                                    }
+                                                  >
+                                                    {form.errors.company_logo
+                                                      ? t(
+                                                          "Company logo is required"
+                                                        )
+                                                      : t(
+                                                          "DropCompanyLogoHere"
+                                                        )}
+                                                  </Text>
+                                                </Center>
+                                              )}
+                                            </Center>
+                                          </Dropzone>
                                         </Box>
                                       </Tooltip>
                                     </Grid.Col>
@@ -1294,4 +1411,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default SignupEditForm;

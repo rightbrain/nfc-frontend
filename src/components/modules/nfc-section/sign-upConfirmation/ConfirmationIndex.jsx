@@ -6,13 +6,13 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { useOutletContext } from "react-router-dom";
-import { getLoadingProgress } from "../../global-hook/loading-progress/getLoadingProgress.js";
+import { getLoadingProgress } from "../../../global-hook/loading-progress/getLoadingProgress.js";
 
-import SignupForm from "./SignupForm.jsx";
+import SignupConfirmation from "./SignupConfirmation.jsx";
 
-function SignupIndex() {
+function ConfirmationIndex() {
     const { t, i18n } = useTranslation();
-    
+
     const context = useOutletContext();
 
     const progress = getLoadingProgress()
@@ -23,7 +23,7 @@ function SignupIndex() {
             {progress === 100 &&
                 <>
                     <Box bg={'white'} mt={6} >
-                        <SignupForm />
+                        <SignupConfirmation />
                     </Box>
                 </>
             }
@@ -32,4 +32,4 @@ function SignupIndex() {
     );
 }
 
-export default SignupIndex;
+export default ConfirmationIndex;
